@@ -78,10 +78,12 @@ public class UnoCard extends Card {
             sketch.fill(255, 255, 0);
             sketch.arc(x + 15, y + 15, 20, 20,
                     3 * sketch.HALF_PI, sketch.TWO_PI);
-        } else if (value == "Draw Four") {
+        } else if (value.equals("Draw Four")) {
             sketch.text("+4", x + 10, y + 10);
-        } else {
-            sketch.text(value, x + 10, y + 10);
+ } else if (value.equals("Gift")) {
+            sketch.text("GIFT", x + 10, y + 10);
+        }else{
+            sketch.text(value, x+10,y+10);
         }
 
     }

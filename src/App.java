@@ -51,7 +51,7 @@ public class App extends PApplet {
             cardGame.getLastPlayedCard().setPosition(width / 2 - 40, height / 2 - 60, 80, 120);
             cardGame.getLastPlayedCard().draw(this);
         }
-        if (cardGame.getCurrentPlayer() == "Player Two") {
+        if ("Player Two".equals(cardGame.getCurrentPlayer())) {
             fill(0);
             textSize(16);
             text("Computer is thinking...", width / 2, height / 2 + 80);
