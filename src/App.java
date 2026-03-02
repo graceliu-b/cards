@@ -2,6 +2,7 @@ import processing.core.PApplet;
 
 public class App extends PApplet {
 
+    public static int gameWidth;
     CardGame cardGame = new Uno();
     private int timer;
 
@@ -63,6 +64,7 @@ public class App extends PApplet {
         }
 
         cardGame.drawChoices(this);
+        cardGame.drawPlayAgain(this);
     }
 
     
@@ -70,6 +72,7 @@ public class App extends PApplet {
     public void mousePressed() {
         cardGame.handleDrawButtonClick(mouseX, mouseY);
         cardGame.handleCardClick(mouseX, mouseY);
+        cardGame.handlePlayAgainClick(mouseX, mouseY);
     }
 
 }
