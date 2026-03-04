@@ -88,7 +88,7 @@ public class Card extends ClickableRectangle {
             sketch.fill(255);
             sketch.rect(x, y, width, height);
             sketch.fill(0);
-            sketch.text(value, x + 10, y + 10);
+            sketch.text(value, x + 40, y + 10);
         }
         sketch.strokeWeight(1);
     }

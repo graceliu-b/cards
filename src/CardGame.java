@@ -26,17 +26,18 @@ public class CardGame {
     ClickableRectangle playAgain;
     public CardGame() {
         initializeGame();
-        dealCards(6);
     }
 
     protected void initializeGame() {
+        playerOneHand = new Hand();
+        playerTwoHand = new Hand();
         // Initialize draw button
         drawButton = new ClickableRectangle();
         drawButton.x = drawButtonX;
         drawButton.y = drawButtonY;
         drawButton.width = drawButtonWidth;
         drawButton.height = drawButtonHeight;
-        playAgain = new ClickableRectangle(App.gameWidth / 2 - 50, 310, 100, 35, "Play Again");//update Clickable REctangle
+        playAgain = new ClickableRectangle(250,310,100,35,"Play Again");//update Clickable REctangle
         // Initialize decks and hands
         deck = new ArrayList<>();
         discardPile = new ArrayList<>();
@@ -103,6 +104,9 @@ public class CardGame {
    public void handlePlayAgainClick(int mouseX, int mouseY) {
         if (playAgain.isClicked(mouseX, mouseY) && !gameActive) {
             initializeGame();
+            playerOneTurn = true;
+            selectedCard = null;
+          
         }
     }
 
@@ -149,13 +153,19 @@ public class CardGame {
         }
         // Draw game over screen
         app.fill(0, 150);
-        app.rect(App.gameWidth / 2 - 150, 200, 300, 150);        app.rect(App.gameWidth / 2 - 150, 200, 300, 150);
+        app.rect(App.gameWidth / 2 - 150, 200, 300, 150);
+
         app.fill(255);
-        app.textAlign(app.CENTER, app.CENTER);
+        app.textAlign(PApplet.CENTER, PApplet.CENTER);
         app.textSize(24);
-        app.text("Game Over!", App.gameWidth / 2, 250);        app.text("Game Over!", App.gameWidth / 2, 250);
-        app.text(getCurrentPlayer() + " wins!", App.gameWidth / 2, 290);        app.text(getCurrentPlayer() + " wins!", App.gameWidth / 2, 290);
+
+        app.text("Game Over!", App.gameWidth / 2, 250);
+        app.text(getCurrentPlayer() + " wins!", App.gameWidth / 2, 290);      
         playAgain.draw(app);
+
+        app.fill(0);
+        app.textSize(16);
+        app.text("Play Again", playAgain.x + playAgain.width/2, playAgain.y + playAgain.height/2);
     }
     public String getCurrentPlayer() {
         return playerOneTurn ? "Player One" : "Player Two";

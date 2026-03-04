@@ -10,7 +10,8 @@ public class Uno extends CardGame {
     int wildCenterX = 300;
     int wildCenterY = 300;
     static String[] colors = { "Red", "Yellow", "Green", "Blue" };
-    static String[] values = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Skip", "Reverse", "Draw Two", "Gift"};
+    static String[] values = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Skip", "Reverse", "Draw Two",
+            "Gift" };
 
     public Uno() {
         initializeGame();
@@ -22,32 +23,28 @@ public class Uno extends CardGame {
         // Create standard cards (2 of each color/value combination except 0)
         for (String color : colors) {
             deck.add(new UnoCard("0", color)); // One 0 card per color
-        
-            for(String value: values){
-                if (!value.equals("0")){
-                    if (value.equals("Gift")){
+
+            for (String value : values) {
+                if (!value.equals("0")) {
+                    if (value.equals("Gift")) {
                         deck.add(new GiftCard(color));
                         deck.add(new GiftCard(color));
-                    }else{
-                        deck.add(new UnoCard(value,color));
-                        deck.add(new UnoCard(value,color));
+                    } else {
+                        deck.add(new UnoCard(value, color));
+                        deck.add(new UnoCard(value, color));
 
                     }
-                    }
-                    }
-                }            
-                
-                
-                //Wild cards
-                for (int i = 0; i<4; i++){
-                    deck.add(new UnoCard("Wild","Wild"));
-                    deck.add(new UnoCard("Draw Four", "Wild"));
                 }
-            
+            }
+        }
 
-}
-      
-    
+        // Wild cards
+        for (int i = 0; i < 4; i++) {
+            deck.add(new UnoCard("Wild", "Wild"));
+            deck.add(new UnoCard("Draw Four", "Wild"));
+        }
+
+    }
 
     @Override
     protected void initializeGame() {
@@ -73,49 +70,52 @@ public class Uno extends CardGame {
         return card;
     }
 
-    @Override 
+    @Override
     public boolean playCard(Card card, Hand hand) {
-       boolean wasPlayerOne = playerOneTurn;
-       boolean result = super.playCard(card, hand);
-       if(result){
-        handleSpecialCards(card, wasPlayerOne);
-       }
-       return result;
+        if (hand.equals(playerOneHand) && card.suit.equals("Wild") && !choosingWildColor) {
+            choosingWildColor = true;
+            return false;
+        }
+        boolean wasPlayerOne = playerOneTurn;
+        boolean result = super.playCard(card, hand);
+        if (result) {
+            handleSpecialCards(card, wasPlayerOne);
+        }
+        return result;
     }
 
     private void handleSpecialCards(Card card, boolean wasPlayerOne) {
         if (card.value.equals("Skip") || card.value.equals("Reverse")) {
             // right now this only supports 2 players, so Reverse is the same as Skip
-            System.out.println("Skipping opponent's turn"); 
+            System.out.println("Skipping opponent's turn");
             switchTurns(); // Skip opponent's turn
         } else if (card.value.startsWith("Draw ")) {
             System.out.println("Skipping opponent's turn");
             int drawNum = "Draw Two".equals(card.value) ? 2 : 4;
             for (int i = 0; i < drawNum; i++) {
-                // refactored into superclass, assuming you've already switched turns to the opponent
+                // refactored into superclass, assuming you've already switched turns to the
+                // opponent
                 drawCard(playerOneTurn ? playerOneHand : playerTwoHand);
             }
             switchTurns();
-        } else if (card.value.equals("Gift")){
+        } else if (card.value.equals("Gift")) {
             System.out.println("Gift card played!");
 
             Hand giver = wasPlayerOne ? playerOneHand : playerTwoHand;
             Hand receiver = wasPlayerOne ? playerTwoHand : playerOneHand;
-            
-            if (giver.getSize()>0){
-                int randomIndex = (int)(Math.random()* giver.getSize());
+
+            if (giver.getSize() > 0) {
+                int randomIndex = (int) (Math.random() * giver.getSize());
                 Card gift = giver.getCard(randomIndex);
 
                 giver.removeCard(gift);
                 receiver.addCard(gift);
             }
-   playerOneHand.positionCards(50,450,80,120,20);
-                playerTwoHand.positionCards(50,50,80,120,20);
-           
-              
-            }
+            playerOneHand.positionCards(50, 450, 80, 120, 20);
+            playerTwoHand.positionCards(50, 50, 80, 120, 20);
+
         }
-    
+    }
 
     @Override
     public void handleDrawButtonClick(int mouseX, int mouseY) {
